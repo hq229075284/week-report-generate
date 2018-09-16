@@ -6,8 +6,10 @@ const fs = require('fs')
 module.exports.getCurrentWeekDuration = () => {
   const format = 'YYYY-MM-DD'
   let startDate, endDate
-  startDate = moment().day(1)
-  endDate = moment().day(5)
+  let weekNum = moment().day()
+  if (moment().day() === 0) weekNum += 7
+  startDate = moment().day(1 - weekNum)
+  endDate = moment().day(5 - weekNum)
   return `${startDate.format(format)}~${endDate.format(format)}`
 }
 
@@ -50,4 +52,13 @@ function tryCreateDir(multiDir, root) {
       fs.mkdirSync(p)
     }
   }
+}
+
+module.exports.createDefaultFileName = function (config) {
+  if (config.fileName) {
+    return config.fileName.replace(/([^\\]?){([^}]*)([^\\])}/g, function ($0, $1, $2, $3) {
+      return $1 + eval($2 + $3)
+    }).replace(/\\({|})/g, '$1')
+  }
+  return '你为啥不配置filename'
 }

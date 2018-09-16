@@ -7,18 +7,20 @@ const xmlStr = fs.readFileSync('./template/jira.xml', { encoding: 'utf8' })
 
 const result = convert.xml2js(xmlStr, { compact: true })
 
+const trimTail = (str) => str.replace(/^\n|\n$/g, '')
+
 const group = {}
 
 result.rss.channel.item.map(one => {
   const a = ({
-    key: one.key._text,
-    link: one.link._text,
-    project: one.project._text,
-    resolution: one.resolution._text,
-    title: one.title._text,
-    summary: one.summary._text,
-    version: one.version._text,
-    type: one.type._text,
+    key: trimTail(one.key._text),
+    link: trimTail(one.link._text),
+    project: trimTail(one.project._text),
+    resolution: trimTail(one.resolution._text),
+    title: trimTail(one.title._text),
+    summary: trimTail(one.summary._text),
+    version: trimTail(one.version._text),
+    type: trimTail(one.type._text),
   })
   if (group[one.project._text]) {
     group[one.project._text].push(a)
@@ -36,7 +38,7 @@ function createList(list) {
 }
 
 const md = Object.entries(group).map(([key, list]) => {
-  let section = `[${key}]\n`
+  let section = `**[${key}]**\n`
   return section += createList(list)
 }).join('')
 

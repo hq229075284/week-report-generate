@@ -1,6 +1,6 @@
 {
   "username": "hanq",
-  "fileName": "工作周报",
+  "fileName": "工作周报-\\{config.username\\}-{config.time}",
   "fileSuffix": "md",
   "templatePath": "./template/周报示范.md"
 }

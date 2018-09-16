@@ -5,14 +5,22 @@ const path = require('path')
 const koaBody = require('koa-body')
 var formidable = require('formidable')
 
+var multer = require('multer')
+var upload = multer({ dest: 'uploads/' })
+
 const app = new Koa()
 // app.use(bodyParser({
 //   formLimit: 100 * 1024 * 1024
 // }))
-// app.use(koaBody({
-//   multipart: true,
-//   formLimit: 100 * 1024 * 1024
-// }))
+app.use(koaBody({
+  // multipart: true,
+  urlencoded: false,
+  formLimit: 100 * 1024 * 1024,
+  formidable: {
+    uploadDir: 'F:\\'
+  }
+}))
+
 
 app.use(async (ctx, next) => {
   await next()
@@ -29,6 +37,7 @@ app.use((ctx, next) => {
   if (ctx.path === '/upload') {
     // ctx.set('content-type', 'application/json')
     let body = Buffer.alloc(0)
+    debugger
     // console.log(ctx.request.body)
     // debugger
     // const v = Buffer.from(ctx.request.body).toString()
@@ -48,10 +57,10 @@ app.use((ctx, next) => {
     //   })
     // })
 
-    var form = new formidable.IncomingForm()
-    form.parse(ctx.req, function (err, fields, files) {
-      debugger
-    })
+    // var form = new formidable.IncomingForm()
+    // form.parse(ctx.req, function (err, fields, files) {
+    //   debugger
+    // })
   }
 })
 

@@ -1,9 +1,10 @@
 #!/usr/bin/env node
-const { getCurrentWeekDuration, createDefaultParams, tryCreateDirWhenNecessary } = require('./utils')
+const { getCurrentWeekDuration, createDefaultParams, tryCreateDirWhenNecessary, createDefaultFileName } = require('./utils')
 const staticConfig = require('./staticConfig')
 
 const yargs = require('yargs')
 const argv = yargs
+  .scriptName("wr")
   .command('new <createPath>', 'add new post',
     (yargs) => yargs.option('y', {
       type: 'boolean',
@@ -11,18 +12,9 @@ const argv = yargs
       default: false
     }),
     createNewPost)
+  .help('h')
+  .alias('h', 'help')
   .argv
-// .option('n', {
-//   alias: 'new',
-//   // demandOption: true,
-//   describe: 'new [path]',
-//   type: 'string'
-// }).option('d', {
-//   alias: 'deploy',
-//   // demandOption: true,
-//   describe: 'new [upload-path]',
-//   type: 'string'
-// }).argv
 
 // console.log(argv)
 const fs = require('fs')
@@ -84,7 +76,7 @@ function getPromptResult() {
       type: 'input',
       name: 'fileName',
       message: '文件名：',
-      default: `${staticConfig.fileName}-${staticConfig.username}-${getCurrentWeekDuration()}`,
+      default: createDefaultFileName({ ...staticConfig, time: getCurrentWeekDuration() }),
     }, {
       type: 'input',
       name: 'username',
