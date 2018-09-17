@@ -7,6 +7,12 @@
     {
       "type": "node",
       "request": "launch",
+      "name": "download",
+      "program": "${workspaceFolder}/cli/download.js"
+    },
+    {
+      "type": "node",
+      "request": "launch",
       "name": "koa",
       "program": "${workspaceFolder}/web/server/index.js"
     },
