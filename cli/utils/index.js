@@ -3,7 +3,7 @@ const staticConfig = require('../staticConfig')
 const path = require('path')
 const fs = require('fs')
 
-module.exports.getCurrentWeekDuration = () => {
+var getCurrentWeekDuration = () => {
   const format = 'YYYY-MM-DD'
   let startDate, endDate
   let weekNum = moment().day()
@@ -13,12 +13,13 @@ module.exports.getCurrentWeekDuration = () => {
   return `${startDate.format(format)}~${endDate.format(format)}`
 }
 
-module.exports.createDefaultParams = () => ({
+var createDefaultParams = () => ({
   ...staticConfig,
-  time: module.exports.getCurrentWeekDuration()
+  fileName: createDefaultFileName({ ...staticConfig, time: getCurrentWeekDuration() }),
+  time: getCurrentWeekDuration()
 })
 
-module.exports.tryCreateDirWhenNecessary = (dirPath) => {
+var tryCreateDirWhenNecessary = (dirPath) => {
   const { platform } = process
   switch (platform) {
     case 'win32': {
@@ -54,11 +55,18 @@ function tryCreateDir(multiDir, root) {
   }
 }
 
-module.exports.createDefaultFileName = function (config) {
+var createDefaultFileName = function (config) {
   if (config.fileName) {
     return config.fileName.replace(/([^\\]?){([^}]*)([^\\])}/g, function ($0, $1, $2, $3) {
       return $1 + eval($2 + $3)
     }).replace(/\\({|})/g, '$1')
   }
   return '你为啥不配置filename'
+}
+
+module.exports = {
+  getCurrentWeekDuration,
+  createDefaultParams,
+  tryCreateDirWhenNecessary,
+  createDefaultFileName,
 }

@@ -25,6 +25,7 @@ app.use(koaBody({
 }))
 
 router.post('/api/upload', (ctx, next) => {
+  console.dir(ctx)
   const { filename } = ctx.request.body
   const { path, name } = ctx.request.files.file
   console.log(filename, path)

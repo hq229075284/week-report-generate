@@ -25,11 +25,17 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "启动程序",
-      "program": "${workspaceFolder}\\index.js",
+      "name": "cli",
+      "program": "${workspaceFolder}\\cli\\index.js",
+      // "args": [
+      //   "new",
+      //   "-y",
+      //   "-p",
+      //   "./test"
+      // ]
       "args": [
-        "new",
-        "./test"
+        "deploy",
+        "./test/工作周报-{config.username}-2018-09-14~2018-09-18.md"
       ]
     }
   ]
