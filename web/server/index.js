@@ -25,11 +25,16 @@ app.use(koaBody({
 }))
 
 router.post('/api/upload', (ctx, next) => {
-  console.dir(ctx)
-  const { filename } = ctx.request.body
-  const { path, name } = ctx.request.files.file
-  console.log(filename, path)
-  fs.renameSync(path, config.fileStoreDir + name)
+  // const { filename } = ctx.request.body
+  const { path: _path, name } = ctx.request.files.file
+  // console.log(filename, path)
+  const renamePath = config.fileStoreDir + name
+  const isExistSameName = fs.existsSync(renamePath)
+  let timestamp = ''
+  if (isExistSameName) {
+    timestamp = (new Date()).valueOf() + '-'
+  }
+  fs.renameSync(_path, path.resolve(config.fileStoreDir, timestamp + name))
   ctx.body = JSON.stringify('success')
 })
 
@@ -43,6 +48,8 @@ router.get('/api/getTemplate', (ctx, next) => {
 })
 
 app.use(router.routes())
+console.log(23)
 // app.use(router.allowedMethods())
 
-app.listen(3000, function () { console.log('listen at 3000') })
+const port = config.port || 3000
+app.listen(port, function () { console.log(`listen at ${port}`) })

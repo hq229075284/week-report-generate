@@ -62,16 +62,14 @@ async function createFileByTemplate(filePath, params, isPullTemplate) {
   const ejs = require('ejs')
   const fs = require('fs')
   const { download } = require('./download')
-  debugger
   let spinner
   if (isPullTemplate) {
     spinner = ora('download template...').start()
     await download()
-    console.log('download download download')
-    spinner.text = 'read template...'
-  } else {
-    spinner = ora('read template...').start()
+    spinner.stop()
+    console.log('文件下载成功')
   }
+  spinner = ora('read template...').start()
   const template = fs.readFileSync(staticConfig.templatePath, { encoding: 'utf8' })
   spinner.text = 'compile template...'
   const md = ejs.render(template, { params })
@@ -80,17 +78,22 @@ async function createFileByTemplate(filePath, params, isPullTemplate) {
   spinner.color = 'green'
   spinner.text = 'success'
   spinner.stop()
+  console.log('文件创建成功')
 }
 
 async function deployMdToServer(_argv) {
   const { upload } = require('./download')
+  const ora = require('ora')
+
   const { mdPath } = _argv
   const fs = require('fs')
   const path = require('path')
   const filePath = path.resolve(process.cwd(), mdPath)
   const isExistThisFile = fs.existsSync(filePath)
   if (isExistThisFile) {
+    const spinner = ora('update...').start()
     await upload(filePath)
+    spinner.stop()
     console.log('上传成功')
   } else {
     throw new Error('文件不存在')
