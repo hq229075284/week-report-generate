@@ -6,10 +6,13 @@ const fs = require('fs')
 var getCurrentWeekDuration = () => {
   const format = 'YYYY-MM-DD'
   let startDate, endDate
-  let weekNum = moment().day()
-  if (moment().day() === 0) weekNum += 7
-  startDate = moment().day(1 - weekNum)
-  endDate = moment().day(5 - weekNum)
+  if (moment().day() === 0) {
+    startDate = moment().day(-6)
+    endDate = moment().day(-2)
+  } else {
+    startDate = moment().day(1)
+    endDate = moment().day(5)
+  }
   return `${startDate.format(format)}~${endDate.format(format)}`
 }
 
