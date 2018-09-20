@@ -12,7 +12,7 @@ function createList(list) {
     return prev + ejs.render(tr, { params: current })
   }, '')
 }
-const trimTail = (str) => str.replace(/^\n|\n$/g, '')
+const trimTail = (str = '') => str.replace(/^\n|\n$/g, '')
 
 document.getElementsByTagName('button')[0].addEventListener('click', function (e) {
   try {
@@ -22,21 +22,20 @@ document.getElementsByTagName('button')[0].addEventListener('click', function (e
 
     const group = {}
     result.rss.channel.item.map(one => {
-      const a = ({
-        key: trimTail(one.key._text),
-        link: trimTail(one.link._text),
-        project: trimTail(one.project._text),
-        resolution: trimTail(one.resolution._text),
-        title: trimTail(one.title._text),
-        summary: trimTail(one.summary._text),
-        version: trimTail(one.version._text),
-        type: trimTail(one.type._text),
-      })
+      const a = {}
+      try { a.key = trimTail(one.key._text) } catch (e) { a.key = '' }
+      try { a.link = trimTail(one.link._text) } catch (e) { a.link = '' }
+      try { a.project = trimTail(one.project._text) } catch (e) { a.project = '' }
+      try { a.resolution = trimTail(one.resolution._text) } catch (e) { a.resolution = '' }
+      try { a.title = trimTail(one.title._text) } catch (e) { a.title = '' }
+      try { a.summary = trimTail(one.summary._text) } catch (e) { a.summary = '' }
+      try { a.version = trimTail(one.version._text) } catch (e) { a.version = '' }
+      try { a.type = trimTail(one.type._text) } catch (e) { a.type = '' }
 
-      if (group[one.project._text]) {
-        group[one.project._text].push(a)
+      if (group[a.project]) {
+        group[a.project].push(a)
       } else {
-        group[one.project._text] = [a]
+        group[a.project] = [a]
       }
     })
 
