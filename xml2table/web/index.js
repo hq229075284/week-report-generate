@@ -2,14 +2,14 @@ import ejs from 'ejs'
 import convert from 'xml-js'
 
 
-const header = '|jiar名称|类型|\n|-|:-:|\n'
-const tr = '|[<%=params.title%>](<%=params.link%>)|<%=params.type%>|\n'
-const a = 1
+const header = '|序号|jiar名称|类型|\n|-|-|:-:|\n'
+const tr = '|<%=config.index+1%>|[<%=config.title%>](<%=config.link%>)|<%=config.type%>|\n'
+
 function createList(list) {
   let renderStr = header
 
-  return renderStr += list.reduce((prev, current) => {
-    return prev + ejs.render(tr, { params: current })
+  return renderStr += list.reduce((prev, current, index) => {
+    return prev + ejs.render(tr, { config: Object.assign(current, { index }) })
   }, '')
 }
 const trimTail = (str = '') => str.replace(/^\n|\n$/g, '')
